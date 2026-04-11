@@ -2,10 +2,10 @@
 Dodge or Die
 
 ## Repository
-https://github.com/alayaa128/Final-Project.git
+[Repository] (https://github.com/alayaa128/Final-Project.git)
 
 ## Description
-It will be a playable game of dodging obstacles. This is related to media and digital arts because it is a digital designed game. It will solve the problem of boredom.
+My final project will be a playable game of dodging obstacles to get to a safe zone. This is related to media and digital arts because it is a digitally designed game. It will solve the problem of boredom by giving someone a fun game to play.
 
 ## Features
 - Moveable character
@@ -28,7 +28,7 @@ It will be a playable game of dodging obstacles. This is related to media and di
 
 ## Outcomes
 Ideal Outcome:
-- The ideal outcome is to create a dodging game where shapes fall from the top of the screen and the moveable character is moved by the player to dodge the obstacals. The player has 3 lives/ chances to be hit, until text displays 'Game Over.' If the player makes it to the safe zone, 'You Won' will be displayed on the screen. Win and lose sounds play at appropriate times, and background music is heard.
+- The ideal outcome is to create a dodging game where shapes fall from the top of the screen and the moveable character is moved by the player to dodge the obstacals. The player has 3 lives/ chances to be hit, until text displays 'Game Over.' If the player makes it to the safe zone, 'You Won' will be displayed on the screen. Win and lose sounds play at appropriate times, and background music is heard throughout gameplay.
 
 Minimal Viable Outcome:
 - Minimal outcome would be the character is moveable, obstacles rain down, and the safezone works. The game would stop when the character is hit or if the player makes it to the safe zone.
@@ -36,13 +36,15 @@ Minimal Viable Outcome:
 ## Milestones
 
 - Week 1
-  1. Goal 1
-  2. Goal 2
+  1. Add character to game
+  2. Add falling obstacles
+  3. Add a safe zone
 
 - Week 2
-  1. Goal 1
-  2. Goal 2
+  1. Make getting to safe zone how to win
+  2. Add 'lives' to character
+  3. Make three hits of an obstacle game over
 
 - Week N (Final)
-  1. Goal 1
-  2. Goal 2
+  1. Add display text 'You Win' and 'Game Over'
+  2. Add sound effects and background music
