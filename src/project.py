@@ -75,7 +75,9 @@ def main():
     dt = 0
     clock = pygame.time.Clock()
     pygame.display.set_caption("Dodge or Die!")
-    resolution = (1920, 1080)
+    x = 1920
+    y = 1080
+    resolution = (x, y)
     screen = pygame.display.set_mode(resolution)
     rain = Obstacle_Rain(width=1920)
     character = Character()
@@ -83,6 +85,7 @@ def main():
     #create safe zone
     #game loop
     while running:
+        
         dt = clock.tick(60) / 1000
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -90,8 +93,9 @@ def main():
         rain.update(dt)
         black = pygame.Color(0, 0, 0)
         screen.fill(black)
-        rain.draw(screen)
+        safe = pygame.draw.rect(screen, (0, 220, 255), (x//2 - 80, 0, 150, 90))
         character.draw(screen)
+        rain.draw(screen)
         pygame.display.flip()
     pygame.quit()
     #event loop
