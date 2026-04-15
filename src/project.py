@@ -45,7 +45,7 @@ class Obstacle_Rain():
         self.width = width
         self.obstacles = []
         self.timer = 0
-        self.spawn_delay = 0.05
+        self.spawn_delay = 0.30
 
     def update(self, dt):
         self.timer += dt
@@ -79,7 +79,7 @@ def main():
     y = 1080
     resolution = (x, y)
     screen = pygame.display.set_mode(resolution)
-    rain = Obstacle_Rain(width=1920)
+    rain = Obstacle_Rain()
     character = Character()
     running = True
     #create safe zone
