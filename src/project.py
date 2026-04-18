@@ -8,7 +8,7 @@ class Character():
         self.size = size
         self.color = pygame.Color(0, 255, 0)
         self.alpha = 255
-    
+
     def draw(self, surface):
         pygame.draw.circle(surface, self.color, self.pos, self.size)
 
@@ -97,8 +97,14 @@ def main():
         character.draw(screen)
         rain.draw(screen)
         pygame.display.flip()
-    pygame.quit()
-    #event loop
+        #moving character with mouse
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_pos = pygame.mouse.get_pos()
+            character.pos = mouse_pos
+        if event.type == pygame.MOUSEBUTTONUP:
+            mouse_pos = pygame.mouse.get_pos()
+
+          #event loop
     #when character gets hit with obstacle
     #hurt sound effect
     #new event loop
@@ -106,6 +112,8 @@ def main():
     #winner sound effect
     #display text
     #background music
+    pygame.quit()
+  
     
 
 if __name__ == "__main__":
