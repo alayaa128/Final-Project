@@ -75,14 +75,27 @@ def main():
     dt = 0
     clock = pygame.time.Clock()
     pygame.display.set_caption("Dodge or Die!")
-    x = 1920
-    y = 1080
-    resolution = (x, y)
+    width = 1920
+    height = 1080
+    resolution = (width, height)
     screen = pygame.display.set_mode(resolution)
     rain = Obstacle_Rain()
     character = Character()
     running = True
     #create safe zone
+    #display text
+    game_font = pygame.font.SysFont('arial', 80)
+    win_font = game_font.render('You Win!', True, 'white')
+        #rect
+    win_font_rect = win_font.get_rect()
+        #position
+    win_font_rect.center = (width//2, 300)
+    #when character gets hit with obstacle
+    #hurt sound effect
+    #new event loop
+    #When character hits safe zone
+    #winner sound effect
+    #background music
     #game loop
     while running:
         
@@ -93,9 +106,10 @@ def main():
         rain.update(dt)
         black = pygame.Color(0, 0, 0)
         screen.fill(black)
-        safe = pygame.draw.rect(screen, (0, 220, 255), (x//2 - 80, 0, 150, 90))
+        safe = pygame.draw.rect(screen, (0, 220, 255), (width//2 - 80, 0, 150, 90))
         character.draw(screen)
         rain.draw(screen)
+        screen.blit(win_font, win_font_rect)
         pygame.display.flip()
         #moving character with mouse
         if pygame.mouse.get_pressed()[0]:
@@ -103,16 +117,7 @@ def main():
                 mouse_pos = pygame.mouse.get_pos()
                 character.pos = mouse_pos
           #event loop
-    #when character gets hit with obstacle
-    #hurt sound effect
-    #new event loop
-    #When character hits safe zone
-    #winner sound effect
-    #display text
-    #background music
     pygame.quit()
-  
-    
 
 if __name__ == "__main__":
     main()
