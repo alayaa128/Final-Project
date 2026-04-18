@@ -99,6 +99,7 @@ def main():
     lose_font_rect.center = (width//2, 400)
     
     game_over = False
+    win = False
     #hurt sound effect
     #new event loop
     #When character hits safe zone
@@ -123,14 +124,25 @@ def main():
         safe = pygame.draw.rect(screen, (0, 220, 255), (width//2 - 80, 0, 150, 90))
         character.draw(screen)
         rain.draw(screen)
-        #screen.blit(win_font, win_font_rect)
+        
         #when character gets hit with obstacle
+        if not win:
+            if safe.colliderect(character.rect):
+                win = True
+        if win:
+            screen.blit(win_font, win_font_rect)
+        elif win and game_over is True:
+            screen.blit(win_font, win_font_rect)
+
         if not game_over:
             for obstacle in rain.obstacles:
                 if obstacle.rect.colliderect(character.rect):
                     game_over = True
         if game_over:
             screen.blit(lose_font, lose_font_rect)
+        elif game_over and win is True:
+            screen.blit(lose_font, lose_font_rect)
+
        
        
         pygame.display.flip()
