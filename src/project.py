@@ -8,6 +8,7 @@ class Character():
         self.size = size
         self.color = pygame.Color(0, 255, 0)
         self.alpha = 255
+        self.rect = pygame.Rect(pos[0], pos[1], 30, 30)
 
     def draw(self, surface):
         pygame.draw.circle(surface, self.color, self.pos, self.size)
@@ -22,11 +23,13 @@ class Obstacle():
         self.life = life
         self.age = 0
         self.dead = False
-        self.speed = random.uniform(150, 300)  
+        self.speed = random.uniform(150, 300)
+        self.rect = pygame.Rect(pos[0], pos[1], 40, 40)
 
     def update(self, dt):
         self.age += dt
         self.pos[1] += self.speed * dt
+        self.rect.topleft = self.pos
         if self.age > self.life:
             self.dead = True
         self.alpha = 255 * (1 - (self.age / self.life))
@@ -79,6 +82,7 @@ def main():
     height = 1080
     resolution = (width, height)
     screen = pygame.display.set_mode(resolution)
+    obstacle = Obstacle()
     rain = Obstacle_Rain()
     character = Character()
     running = True
@@ -106,21 +110,25 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if pygame.mouse.get_pressed()[0]:
+                if event.type == pygame.MOUSEMOTION:
+                    mouse_pos = pygame.mouse.get_pos()
+                    character.pos = mouse_pos
+                    character.rect.topleft = mouse_pos
         rain.update(dt)
         black = pygame.Color(0, 0, 0)
         screen.fill(black)
         safe = pygame.draw.rect(screen, (0, 220, 255), (width//2 - 80, 0, 150, 90))
         character.draw(screen)
         rain.draw(screen)
-        screen.blit(win_font, win_font_rect)
-        screen.blit(lose_font, lose_font_rect)
+        #screen.blit(win_font, win_font_rect)
+        for obstacle in rain.obstacles:
+            if obstacle.rect.colliderect(character.rect):
+                screen.blit(lose_font, lose_font_rect)
         pygame.display.flip()
         #moving character with mouse
-        if pygame.mouse.get_pressed()[0]:
-            if event.type == pygame.MOUSEMOTION:
-                mouse_pos = pygame.mouse.get_pos()
-                character.pos = mouse_pos
-          #event loop
+            
+        
     pygame.quit()
 
 if __name__ == "__main__":
