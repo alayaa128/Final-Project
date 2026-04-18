@@ -97,7 +97,8 @@ def main():
         #position
     win_font_rect.center = (width//2, 300)
     lose_font_rect.center = (width//2, 400)
-    #when character gets hit with obstacle
+    
+    game_over = False
     #hurt sound effect
     #new event loop
     #When character hits safe zone
@@ -110,6 +111,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            #moving character with mouse
             if pygame.mouse.get_pressed()[0]:
                 if event.type == pygame.MOUSEMOTION:
                     mouse_pos = pygame.mouse.get_pos()
@@ -122,13 +124,17 @@ def main():
         character.draw(screen)
         rain.draw(screen)
         #screen.blit(win_font, win_font_rect)
-        for obstacle in rain.obstacles:
-            if obstacle.rect.colliderect(character.rect):
-                screen.blit(lose_font, lose_font_rect)
+        #when character gets hit with obstacle
+        if not game_over:
+            for obstacle in rain.obstacles:
+                if obstacle.rect.colliderect(character.rect):
+                    game_over = True
+        if game_over:
+            screen.blit(lose_font, lose_font_rect)
+       
+       
         pygame.display.flip()
-        #moving character with mouse
-            
-        
+
     pygame.quit()
 
 if __name__ == "__main__":
