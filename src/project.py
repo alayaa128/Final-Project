@@ -86,10 +86,13 @@ def main():
     #display text
     game_font = pygame.font.SysFont('arial', 80)
     win_font = game_font.render('You Win!', True, 'white')
+    lose_font = game_font.render('You Lose!', True, 'red')
         #rect
     win_font_rect = win_font.get_rect()
+    lose_font_rect = lose_font.get_rect()
         #position
     win_font_rect.center = (width//2, 300)
+    lose_font_rect.center = (width//2, 400)
     #when character gets hit with obstacle
     #hurt sound effect
     #new event loop
@@ -110,6 +113,7 @@ def main():
         character.draw(screen)
         rain.draw(screen)
         screen.blit(win_font, win_font_rect)
+        screen.blit(lose_font, lose_font_rect)
         pygame.display.flip()
         #moving character with mouse
         if pygame.mouse.get_pressed()[0]:
