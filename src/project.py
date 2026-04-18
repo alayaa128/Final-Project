@@ -98,12 +98,10 @@ def main():
         rain.draw(screen)
         pygame.display.flip()
         #moving character with mouse
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            mouse_pos = pygame.mouse.get_pos()
-            character.pos = mouse_pos
-        if event.type == pygame.MOUSEBUTTONUP:
-            mouse_pos = pygame.mouse.get_pos()
-
+        if pygame.mouse.get_pressed()[0]:
+            if event.type == pygame.MOUSEMOTION:
+                mouse_pos = pygame.mouse.get_pos()
+                character.pos = mouse_pos
           #event loop
     #when character gets hit with obstacle
     #hurt sound effect
