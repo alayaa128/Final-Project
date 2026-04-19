@@ -126,23 +126,24 @@ def main():
         rain.draw(screen)
         
         #when character gets hit with obstacle
-        if not win:
+        if not win and not game_over:
             if safe.colliderect(character.rect):
                 win = True
         if win:
             screen.blit(win_font, win_font_rect)
-        elif win and game_over is True:
-            screen.blit(win_font, win_font_rect)
-
-        if not game_over:
+        if win:
+            if obstacle.rect.colliderect(character.rect):
+                game_over = False
+        
+        if not game_over and not win:
             for obstacle in rain.obstacles:
                 if obstacle.rect.colliderect(character.rect):
                     game_over = True
         if game_over:
             screen.blit(lose_font, lose_font_rect)
-        elif game_over and win is True:
-            screen.blit(lose_font, lose_font_rect)
-
+        if game_over:
+            if safe.colliderect(character.rect):
+                win = False
        
        
         pygame.display.flip()
