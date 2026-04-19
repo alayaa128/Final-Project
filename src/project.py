@@ -23,7 +23,7 @@ class Obstacle():
         self.life = life
         self.age = 0
         self.dead = False
-        self.speed = random.uniform(150, 300)
+        self.speed = random.uniform(230, 400)
         self.rect = pygame.Rect(pos[0], pos[1], 40, 40)
 
     def update(self, dt):
@@ -37,7 +37,7 @@ class Obstacle():
     def draw(self, surface):
         if self.dead:
             return
-        pygame.draw.circle(surface, self.color, self.pos, 40)
+        pygame.draw.circle(surface, self.color, self.pos, 50)
 
 class Obstacle_Rain():
 
@@ -48,7 +48,7 @@ class Obstacle_Rain():
         self.width = width
         self.obstacles = []
         self.timer = 0
-        self.spawn_delay = 0.30
+        self.spawn_delay = 0.10
 
     def update(self, dt):
         self.timer += dt
@@ -86,7 +86,6 @@ def main():
     rain = Obstacle_Rain()
     character = Character()
     running = True
-    #create safe zone
     #display text
     game_font = pygame.font.SysFont('arial', 80)
     win_font = game_font.render('You Win!', True, 'white')
@@ -121,7 +120,7 @@ def main():
         rain.update(dt)
         black = pygame.Color(0, 0, 0)
         screen.fill(black)
-        safe = pygame.draw.rect(screen, (0, 220, 255), (width//2 - 80, 0, 150, 90))
+        safe = pygame.draw.rect(screen, (0, 220, 255), ((random.randint(500, 1300)) - 80, 0, 150, 90))
         character.draw(screen)
         rain.draw(screen)
         
