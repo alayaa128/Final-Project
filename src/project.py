@@ -73,7 +73,6 @@ class Obstacle_Rain():
             obstacle.draw(surface)
 
 def main():
-    #initialize game
     pygame.init()
     dt = 0
     clock = pygame.time.Clock()
@@ -85,28 +84,21 @@ def main():
     obstacle = Obstacle()
     rain = Obstacle_Rain()
     character = Character()
+    og_pos = character.pos
     running = True
-    #display text
     game_font = pygame.font.SysFont('arial', 80)
     win_font = game_font.render('You Win!', True, 'white')
     lose_font = game_font.render('You Lose!', True, 'red')
-        #rect
     win_font_rect = win_font.get_rect()
     lose_font_rect = lose_font.get_rect()
-        #position
     win_font_rect.center = (width//2, 300)
     lose_font_rect.center = (width//2, 400)
     
     game_over = False
     win = False
-    #hurt sound effect
-    #new event loop
-    #When character hits safe zone
-    #winner sound effect
-    #background music
-    #game loop
+    
     while running:
-        
+        #background music
         dt = clock.tick(60) / 1000
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -117,18 +109,19 @@ def main():
                     mouse_pos = pygame.mouse.get_pos()
                     character.pos = mouse_pos
                     character.rect.topleft = mouse_pos
+            
         rain.update(dt)
         black = pygame.Color(0, 0, 0)
         screen.fill(black)
         safe = pygame.draw.rect(screen, (0, 220, 255), ((random.randint(500, 1300)) - 80, 0, 150, 90))
         character.draw(screen)
         rain.draw(screen)
-        
-        #when character gets hit with obstacle
+
         if not win and not game_over:
             if safe.colliderect(character.rect):
                 win = True
         if win:
+            #winner sound effect
             screen.blit(win_font, win_font_rect)
         if win:
             if obstacle.rect.colliderect(character.rect):
@@ -140,11 +133,18 @@ def main():
                     game_over = True
         if game_over:
             screen.blit(lose_font, lose_font_rect)
+            #hurt sound effect
         if game_over:
             if safe.colliderect(character.rect):
                 win = False
-       
-       
+        #backspace restart
+        #for event in pygame.event.get():
+            #if event.type == pygame.KEYDOWN:
+                #if event.key == pygame.K_BACKSPACE:
+                    #game_over = False
+                   # win = False
+                    #character.pos = og_pos
+        
         pygame.display.flip()
 
     pygame.quit()
