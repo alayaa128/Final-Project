@@ -98,11 +98,17 @@ def main():
     win_font_rect.center = (width//2, 300)
     lose_font_rect.center = (width//2, 400)
     
+    win_sound = pygame.mixer.Sound('win sound 3.mp3')
+    game_over_sound = pygame.mixer.Sound('game over.mp3')
+    hit_sound = pygame.mixer.Sound('hit sound.mp3')
+    #background_music = pygame.mixer.Sound('background music.mp3')
+    played_game_over_sound = False
+    played_win_sound = False
     game_over = False
     win = False
     hit = 0
     while running:
-        #background music
+        #background_music.play()
         dt = clock.tick(60) / 1000
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -110,17 +116,17 @@ def main():
             #moving chracter with arrow keys
             keys = pygame.key.get_pressed()
             if keys[pygame.K_UP]:
-                character.pos[1] -= 1200 * dt
+                character.pos[1] -= 1300 * dt
                 character.rect.topleft = character.pos
             if keys[pygame.K_DOWN]:
-                character.pos[1] += 1200 * dt
+                character.pos[1] += 1300 * dt
                 character.rect.topleft = character.pos
 
             if keys[pygame.K_LEFT]:
-                character.pos[0] -= 1200 * dt
+                character.pos[0] -= 1300 * dt
                 character.rect.topleft = character.pos
             if keys[pygame.K_RIGHT]:
-                character.pos[0] += 1200 * dt
+                character.pos[0] += 100 * dt
                 character.rect.topleft = character.pos
             
         rain.update(dt)
@@ -133,8 +139,11 @@ def main():
         if not win and not game_over:
             if safe.colliderect(character.rect):
                 win = True
-        if win:
-            #winner sound effect
+        if win and not played_win_sound:
+            win_sound.play()
+            screen.blit(win_font, win_font_rect)
+            played_win_sound = True
+        if win and played_win_sound:
             screen.blit(win_font, win_font_rect)
         if win:
             if obstacle.rect.colliderect(character.rect):
@@ -144,15 +153,19 @@ def main():
                 if obstacle.rect.colliderect(character.rect):
                     hit += 1
                     lives -= 1
+                    hit_sound.play()
                     rain.obstacles.remove(obstacle)
         lives_font = pygame.font.SysFont('arial', 60)
         lives_font = lives_font.render(f"Lives: {lives}", True, 'yellow')
         screen.blit(lives_font, lives_font_rect)
         if hit == 3:
             game_over = True
-        if game_over:
+        if game_over and not played_game_over_sound:
             screen.blit(lose_font, lose_font_rect)
-            #hurt sound effect
+            game_over_sound.play()
+            played_game_over_sound = True
+        if game_over and played_game_over_sound:
+            screen.blit(lose_font, lose_font_rect)
         if game_over:
             if safe.colliderect(character.rect):
                 win = False
