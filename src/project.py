@@ -3,7 +3,7 @@ import random
 
 class Character():
 
-    def __init__(self, pos=(960,950), size=30):
+    def __init__(self, pos=[960,950], size=30):
         self.pos = pos
         self.size = size
         self.color = pygame.Color(0, 255, 0)
@@ -48,7 +48,7 @@ class Obstacle_Rain():
         self.width = width
         self.obstacles = []
         self.timer = 0
-        self.spawn_delay = 0.10
+        self.spawn_delay = 0.15
 
     def update(self, dt):
         self.timer += dt
@@ -88,7 +88,7 @@ def main():
     running = True
     game_font = pygame.font.SysFont('arial', 80)
     win_font = game_font.render('You Win!', True, 'white')
-    lose_font = game_font.render('You Lose!', True, 'red')
+    lose_font = game_font.render('GAME OVER!', True, 'red')
     win_font_rect = win_font.get_rect()
     lose_font_rect = lose_font.get_rect()
     win_font_rect.center = (width//2, 300)
@@ -96,19 +96,28 @@ def main():
     
     game_over = False
     win = False
-    
+    hit = 0
     while running:
         #background music
         dt = clock.tick(60) / 1000
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            #moving character with mouse
-            if pygame.mouse.get_pressed()[0]:
-                if event.type == pygame.MOUSEMOTION:
-                    mouse_pos = pygame.mouse.get_pos()
-                    character.pos = mouse_pos
-                    character.rect.topleft = mouse_pos
+            #moving chracter with arrow keys
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_UP]:
+                character.pos[1] -= 1200 * dt
+                character.rect.topleft = character.pos
+            if keys[pygame.K_DOWN]:
+                character.pos[1] += 1200 * dt
+                character.rect.topleft = character.pos
+
+            if keys[pygame.K_LEFT]:
+                character.pos[0] -= 1200 * dt
+                character.rect.topleft = character.pos
+            if keys[pygame.K_RIGHT]:
+                character.pos[0] += 1200 * dt
+                character.rect.topleft = character.pos
             
         rain.update(dt)
         black = pygame.Color(0, 0, 0)
@@ -130,7 +139,11 @@ def main():
         if not game_over and not win:
             for obstacle in rain.obstacles:
                 if obstacle.rect.colliderect(character.rect):
-                    game_over = True
+                    hit += 1
+                    rain.obstacles.remove(obstacle)
+                    print (hit)
+        if hit == 3:
+            game_over = True
         if game_over:
             screen.blit(lose_font, lose_font_rect)
             #hurt sound effect
@@ -142,7 +155,7 @@ def main():
             #if event.type == pygame.KEYDOWN:
                 #if event.key == pygame.K_BACKSPACE:
                     #game_over = False
-                   # win = False
+                    #win = False
                     #character.pos = og_pos
         
         pygame.display.flip()
