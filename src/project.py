@@ -84,13 +84,17 @@ def main():
     obstacle = Obstacle()
     rain = Obstacle_Rain()
     character = Character()
-    og_pos = character.pos
+    lives = 3
     running = True
     game_font = pygame.font.SysFont('arial', 80)
+    lives_font = pygame.font.SysFont('arial', 50)
+    lives_font = lives_font.render(f"Lives: {lives}", True, 'yellow')
     win_font = game_font.render('You Win!', True, 'white')
     lose_font = game_font.render('GAME OVER!', True, 'red')
+    lives_font_rect = lives_font.get_rect()
     win_font_rect = win_font.get_rect()
     lose_font_rect = lose_font.get_rect()
+    lives_font_rect.center = (1700, 80)
     win_font_rect.center = (width//2, 300)
     lose_font_rect.center = (width//2, 400)
     
@@ -122,10 +126,10 @@ def main():
         rain.update(dt)
         black = pygame.Color(0, 0, 0)
         screen.fill(black)
-        safe = pygame.draw.rect(screen, (0, 220, 255), ((random.randint(500, 1300)) - 80, 0, 150, 90))
+        safe = pygame.draw.rect(screen, (0, 220, 255), (width//2 - 80, 0, 150, 90))
         character.draw(screen)
         rain.draw(screen)
-
+        screen.blit(lives_font, lives_font_rect)
         if not win and not game_over:
             if safe.colliderect(character.rect):
                 win = True
@@ -135,13 +139,15 @@ def main():
         if win:
             if obstacle.rect.colliderect(character.rect):
                 game_over = False
-        
         if not game_over and not win:
             for obstacle in rain.obstacles:
                 if obstacle.rect.colliderect(character.rect):
                     hit += 1
+                    lives -= 1
                     rain.obstacles.remove(obstacle)
-                    print (hit)
+        lives_font = pygame.font.SysFont('arial', 60)
+        lives_font = lives_font.render(f"Lives: {lives}", True, 'yellow')
+        screen.blit(lives_font, lives_font_rect)
         if hit == 3:
             game_over = True
         if game_over:
@@ -150,17 +156,7 @@ def main():
         if game_over:
             if safe.colliderect(character.rect):
                 win = False
-        #backspace restart
-        #for event in pygame.event.get():
-            #if event.type == pygame.KEYDOWN:
-                #if event.key == pygame.K_BACKSPACE:
-                    #game_over = False
-                    #win = False
-                    #character.pos = og_pos
-        
         pygame.display.flip()
-
     pygame.quit()
-
 if __name__ == "__main__":
     main()

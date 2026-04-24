@@ -9,7 +9,7 @@ My final project will be a playable game of dodging obstacles to get to a safe z
 
 ## Features
 - Moveable character
-	- The arrow keys on the koyboard will be used to move the character around.
+	- The arrow keys on the keyboard will be used to move the character around.
 - Obstacles
 	- Things will fall from the top of the screen and cause the game to end if the character gets hit. They fall from random areas of the screen from various sizes, and various speeds.
 - Safe Zone
