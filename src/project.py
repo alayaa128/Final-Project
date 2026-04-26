@@ -170,6 +170,7 @@ def main():
     game_over_sound = pygame.mixer.Sound('game over.mp3')
     hit_sound = pygame.mixer.Sound('hit sound.mp3')
     pygame.mixer.music.load('background music.mp3')
+    pygame.mixer.music.set_volume(0.3)
     pygame.mixer.music.play(-1)
     played_game_over_sound = False
     played_win_sound = False
