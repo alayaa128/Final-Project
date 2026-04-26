@@ -89,15 +89,18 @@ class Obstacle_Rain():
             obstacle.draw(surface)
 
 def hit_obstacle(rain, character, lives, hit):
+    got_hit = False
+
     for obstacle in rain.obstacles:
         if obstacle.rect.colliderect(character.rect):
                 hit += 1
                 lives -= 1
                 rain.obstacles.remove(obstacle)
+                got_hit = True
 
     if lives < 0:
         lives = 0
-    return lives, hit
+    return lives, hit, got_hit
 
 def is_game_over(hit, win):
     if win:
@@ -108,25 +111,22 @@ def is_win(safe, character):
     if safe.colliderect(character.rect):
         return True
 
-def sound_effects(win, game_over, hit):
-     # plays sounds when the character gets hit, game over, wins
-    win_sound = pygame.mixer.Sound('win sound 3.mp3')
-    game_over_sound = pygame.mixer.Sound('game over.mp3')
-    hit_sound = pygame.mixer.Sound('hit sound.mp3')
+def sound_effects(win, game_over, got_hit, win_sound, game_over_sound, hit_sound, 
+                  played_win_sound, played_hit, played_game_over_sound):
     #background_music = pygame.mixer.Sound('background music.mp3')
-    played_game_over_sound = False
-    played_win_sound = False
-
     if win and not played_win_sound:
         win_sound.play()
         played_win_sound = True
 
-    if hit:
+    if got_hit and not game_over:
         hit_sound.play()
+        played_hit = True
 
     if game_over and not played_game_over_sound:
         game_over_sound.play()
         played_game_over_sound = True
+
+    return played_win_sound, played_hit, played_game_over_sound
 
 def display_text(win, game_over, screen, lives):
     #displays text onto the screen
@@ -169,6 +169,12 @@ def main():
     lives = 3
     game_over = False
     win = False
+    win_sound = pygame.mixer.Sound('win sound 3.mp3')
+    game_over_sound = pygame.mixer.Sound('game over.mp3')
+    hit_sound = pygame.mixer.Sound('hit sound.mp3')
+    played_game_over_sound = False
+    played_win_sound = False
+    played_hit = False
     running = True
     while running:
         dt = clock.tick(60) / 1000
@@ -190,9 +196,10 @@ def main():
         if game_over:
             win = False
         if not game_over and not win:
-            lives, hit = hit_obstacle(rain, character, lives, hit)
+            lives, hit, got_hit = hit_obstacle(rain, character, lives, hit)
         display_text(win, game_over, screen, lives)
-        sound_effects
+        played_win_sound, played_hit, played_game_over_sound = sound_effects(win, game_over, got_hit, win_sound, game_over_sound, hit_sound, 
+                  played_win_sound, played_hit, played_game_over_sound)
         pygame.display.flip()
     pygame.quit()
 if __name__ == "__main__":
