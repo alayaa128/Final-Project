@@ -88,20 +88,50 @@ class Obstacle_Rain():
         for obstacle in self.obstacles:
             obstacle.draw(surface)
 
-def main():
-    pygame.init()
-    dt = 0
-    clock = pygame.time.Clock()
-    pygame.display.set_caption("Dodge or Die!")
-    width = 1920
-    height = 1080
-    resolution = (width, height)
-    screen = pygame.display.set_mode(resolution)
-    obstacle = Obstacle()
-    rain = Obstacle_Rain()
-    character = Character()
+def hit_obstacle(rain, character):
+    hit = 0
+    if not game_over and not win:
+        for obstacle in rain.obstacles:
+            if obstacle.rect.colliderect(character.rect):
+                    hit += 1
+            return hit
+            rain.obstacles.remove(obstacle)
+
+def game_over():
+    if hit_obstacle == 3:
+        return True
+    if win:
+        return False
+
+def win(safe, character, screen):
+    safe = pygame.draw.rect(screen, (0, 220, 255), (1920//2 - 80, 0, 150, 90))
+    if not win and not game_over:
+        if safe.colliderect(character.rect):
+            return True
+
+def sound_effects():
+     # plays sounds when the character gets hit, game over, wins
+    win_sound = pygame.mixer.Sound('win sound 3.mp3')
+    game_over_sound = pygame.mixer.Sound('game over.mp3')
+    hit_sound = pygame.mixer.Sound('hit sound.mp3')
+    #background_music = pygame.mixer.Sound('background music.mp3')
+    played_game_over_sound = False
+    played_win_sound = False
+
+    if win and not played_win_sound:
+            win_sound.play()
+            played_win_sound = True
+
+    if hit_obstacle:
+        hit_sound.play()
+
+    if game_over and not played_game_over_sound:
+        game_over_sound.play()
+        played_game_over_sound = True
+
+def display_text(screen):
+    #displays text onto the screen
     lives = 3
-    running = True
     game_font = pygame.font.SysFont('arial', 80)
     lives_font = pygame.font.SysFont('arial', 50)
     lives_font = lives_font.render(f"Lives: {lives}", True, 'yellow')
@@ -111,67 +141,54 @@ def main():
     win_font_rect = win_font.get_rect()
     lose_font_rect = lose_font.get_rect()
     lives_font_rect.center = (1700, 80)
-    win_font_rect.center = (width//2, 300)
-    lose_font_rect.center = (width//2, 400)
+    win_font_rect.center = (1920//2, 300)
+    lose_font_rect.center = (1920//2, 400)
     
-    win_sound = pygame.mixer.Sound('win sound 3.mp3')
-    game_over_sound = pygame.mixer.Sound('game over.mp3')
-    hit_sound = pygame.mixer.Sound('hit sound.mp3')
-    #background_music = pygame.mixer.Sound('background music.mp3')
-    played_game_over_sound = False
-    played_win_sound = False
-    game_over = False
-    win = False
-    hit = 0
+    if win:
+        screen.blit(win_font, win_font_rect)
+    
+    
+        lives -= 1
+                    
+        lives_font = pygame.font.SysFont('arial', 60)
+        lives_font = lives_font.render(f"Lives: {lives}", True, 'yellow')
+        screen.blit(lives_font, lives_font_rect)
+    
+    if game_over and not played_game_over_sound:
+            screen.blit(lose_font, lose_font_rect)
+            game_over_sound.play()
+            played_game_over_sound = True
+    if game_over and played_game_over_sound:
+            screen.blit(lose_font, lose_font_rect)
+    if game_over:
+        if safe.colliderect(character.rect):
+            win = False
+
+def main():
+    pygame.init()
+    dt = 0
+    clock = pygame.time.Clock()
+    pygame.display.set_caption("Dodge or Die!")
+    width = 1920
+    height = 1080
+    resolution = (width, height)
+    screen = pygame.display.set_mode(resolution)
+    rain = Obstacle_Rain()
+    character = Character()
+    running = True
     while running:
-        #background_music.play()
         dt = clock.tick(60) / 1000
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            #moving chracter with arrow keys
         keys = pygame.key.get_pressed()
         character.update_pos(keys, dt)
         rain.update(dt)
         black = pygame.Color(0, 0, 0)
         screen.fill(black)
-        safe = pygame.draw.rect(screen, (0, 220, 255), (width//2 - 80, 0, 150, 90))
         character.draw(screen)
         rain.draw(screen)
-        screen.blit(lives_font, lives_font_rect)
-        if not win and not game_over:
-            if safe.colliderect(character.rect):
-                win = True
-        if win and not played_win_sound:
-            win_sound.play()
-            screen.blit(win_font, win_font_rect)
-            played_win_sound = True
-        if win and played_win_sound:
-            screen.blit(win_font, win_font_rect)
-        if win:
-            if obstacle.rect.colliderect(character.rect):
-                game_over = False
-        if not game_over and not win:
-            for obstacle in rain.obstacles:
-                if obstacle.rect.colliderect(character.rect):
-                    hit += 1
-                    lives -= 1
-                    hit_sound.play()
-                    rain.obstacles.remove(obstacle)
-        lives_font = pygame.font.SysFont('arial', 60)
-        lives_font = lives_font.render(f"Lives: {lives}", True, 'yellow')
-        screen.blit(lives_font, lives_font_rect)
-        if hit == 3:
-            game_over = True
-        if game_over and not played_game_over_sound:
-            screen.blit(lose_font, lose_font_rect)
-            game_over_sound.play()
-            played_game_over_sound = True
-        if game_over and played_game_over_sound:
-            screen.blit(lose_font, lose_font_rect)
-        if game_over:
-            if safe.colliderect(character.rect):
-                win = False
+        display_text(screen)
         pygame.display.flip()
     pygame.quit()
 if __name__ == "__main__":
