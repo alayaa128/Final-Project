@@ -10,6 +10,22 @@ class Character():
         self.alpha = 255
         self.rect = pygame.Rect(pos[0], pos[1], 30, 30)
 
+    def update_pos(self, keys, dt):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_UP]:
+            self.pos[1] -= 300 * dt
+            self.rect.topleft = self.pos
+        if keys[pygame.K_DOWN]:
+            self.pos[1] += 300 * dt
+            self.rect.topleft = self.pos
+
+        if keys[pygame.K_LEFT]:
+            self.pos[0] -= 300 * dt
+            self.rect.topleft = self.pos
+        if keys[pygame.K_RIGHT]:
+            self.pos[0] += 300 * dt
+            self.rect.topleft = self.pos
+
     def draw(self, surface):
         pygame.draw.circle(surface, self.color, self.pos, self.size)
 
@@ -114,21 +130,8 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             #moving chracter with arrow keys
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_UP]:
-                character.pos[1] -= 1300 * dt
-                character.rect.topleft = character.pos
-            if keys[pygame.K_DOWN]:
-                character.pos[1] += 1300 * dt
-                character.rect.topleft = character.pos
-
-            if keys[pygame.K_LEFT]:
-                character.pos[0] -= 1300 * dt
-                character.rect.topleft = character.pos
-            if keys[pygame.K_RIGHT]:
-                character.pos[0] += 100 * dt
-                character.rect.topleft = character.pos
-            
+        keys = pygame.key.get_pressed()
+        character.update_pos(keys, dt)
         rain.update(dt)
         black = pygame.Color(0, 0, 0)
         screen.fill(black)
