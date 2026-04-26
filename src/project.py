@@ -88,28 +88,27 @@ class Obstacle_Rain():
         for obstacle in self.obstacles:
             obstacle.draw(surface)
 
-def hit_obstacle(rain, character):
-    hit = 0
-    if not game_over and not win:
-        for obstacle in rain.obstacles:
-            if obstacle.rect.colliderect(character.rect):
-                    hit += 1
-            return hit
-            rain.obstacles.remove(obstacle)
+def hit_obstacle(rain, character, lives, hit):
+    for obstacle in rain.obstacles:
+        if obstacle.rect.colliderect(character.rect):
+                hit += 1
+                lives -= 1
+                rain.obstacles.remove(obstacle)
 
-def game_over():
-    if hit_obstacle == 3:
-        return True
+    if lives < 0:
+        lives = 0
+    return lives, hit
+
+def is_game_over(hit, win):
     if win:
         return False
+    return hit >= 3
 
-def win(safe, character, screen):
-    safe = pygame.draw.rect(screen, (0, 220, 255), (1920//2 - 80, 0, 150, 90))
-    if not win and not game_over:
-        if safe.colliderect(character.rect):
-            return True
+def is_win(safe, character):
+    if safe.colliderect(character.rect):
+        return True
 
-def sound_effects():
+def sound_effects(win, game_over, hit):
      # plays sounds when the character gets hit, game over, wins
     win_sound = pygame.mixer.Sound('win sound 3.mp3')
     game_over_sound = pygame.mixer.Sound('game over.mp3')
@@ -119,50 +118,40 @@ def sound_effects():
     played_win_sound = False
 
     if win and not played_win_sound:
-            win_sound.play()
-            played_win_sound = True
+        win_sound.play()
+        played_win_sound = True
 
-    if hit_obstacle:
+    if hit:
         hit_sound.play()
 
     if game_over and not played_game_over_sound:
         game_over_sound.play()
         played_game_over_sound = True
 
-def display_text(screen):
+def display_text(win, game_over, screen, lives):
     #displays text onto the screen
-    lives = 3
     game_font = pygame.font.SysFont('arial', 80)
     lives_font = pygame.font.SysFont('arial', 50)
-    lives_font = lives_font.render(f"Lives: {lives}", True, 'yellow')
+    live_font = lives_font.render(f"Lives: {lives}", True, 'yellow')
     win_font = game_font.render('You Win!', True, 'white')
     lose_font = game_font.render('GAME OVER!', True, 'red')
-    lives_font_rect = lives_font.get_rect()
+    live_font_rect = live_font.get_rect()
     win_font_rect = win_font.get_rect()
     lose_font_rect = lose_font.get_rect()
-    lives_font_rect.center = (1700, 80)
+    live_font_rect.center = (1700, 80)
     win_font_rect.center = (1920//2, 300)
     lose_font_rect.center = (1920//2, 400)
     
+
     if win:
         screen.blit(win_font, win_font_rect)
+
+   
+    lives_font = lives_font.render(f"Lives: {lives}", True, 'yellow')
+    screen.blit(lives_font, live_font_rect)
     
-    
-        lives -= 1
-                    
-        lives_font = pygame.font.SysFont('arial', 60)
-        lives_font = lives_font.render(f"Lives: {lives}", True, 'yellow')
-        screen.blit(lives_font, lives_font_rect)
-    
-    if game_over and not played_game_over_sound:
-            screen.blit(lose_font, lose_font_rect)
-            game_over_sound.play()
-            played_game_over_sound = True
-    if game_over and played_game_over_sound:
-            screen.blit(lose_font, lose_font_rect)
     if game_over:
-        if safe.colliderect(character.rect):
-            win = False
+        screen.blit(lose_font, lose_font_rect)
 
 def main():
     pygame.init()
@@ -173,8 +162,13 @@ def main():
     height = 1080
     resolution = (width, height)
     screen = pygame.display.set_mode(resolution)
+    obstacle = Obstacle()
     rain = Obstacle_Rain()
     character = Character()
+    hit = 0
+    lives = 3
+    game_over = False
+    win = False
     running = True
     while running:
         dt = clock.tick(60) / 1000
@@ -186,9 +180,19 @@ def main():
         rain.update(dt)
         black = pygame.Color(0, 0, 0)
         screen.fill(black)
+        safe = pygame.draw.rect(screen, (0, 220, 255), (1920//2 - 80, 0, 150, 90))
         character.draw(screen)
         rain.draw(screen)
-        display_text(screen)
+        if not game_over:
+            if is_win(safe, character):
+                win = True
+        game_over = is_game_over(hit, win)
+        if game_over:
+            win = False
+        if not game_over and not win:
+            lives, hit = hit_obstacle(rain, character, lives, hit)
+        display_text(win, game_over, screen, lives)
+        sound_effects
         pygame.display.flip()
     pygame.quit()
 if __name__ == "__main__":
