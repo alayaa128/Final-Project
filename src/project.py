@@ -158,11 +158,8 @@ def main():
     dt = 0
     clock = pygame.time.Clock()
     pygame.display.set_caption("Dodge or Die!")
-    width = 1920
-    height = 1080
-    resolution = (width, height)
+    resolution = (1920, 1080)
     screen = pygame.display.set_mode(resolution)
-    obstacle = Obstacle()
     rain = Obstacle_Rain()
     character = Character()
     hit = 0
@@ -172,6 +169,8 @@ def main():
     win_sound = pygame.mixer.Sound('win sound 3.mp3')
     game_over_sound = pygame.mixer.Sound('game over.mp3')
     hit_sound = pygame.mixer.Sound('hit sound.mp3')
+    pygame.mixer.music.load('background music.mp3')
+    pygame.mixer.music.play(-1)
     played_game_over_sound = False
     played_win_sound = False
     played_hit = False
@@ -198,8 +197,8 @@ def main():
         if not game_over and not win:
             lives, hit, got_hit = hit_obstacle(rain, character, lives, hit)
         display_text(win, game_over, screen, lives)
-        played_win_sound, played_hit, played_game_over_sound = sound_effects(win, game_over, got_hit, win_sound, game_over_sound, hit_sound, 
-                  played_win_sound, played_hit, played_game_over_sound)
+        played_win_sound, played_hit, played_game_over_sound = sound_effects(win, game_over, got_hit, win_sound, 
+            game_over_sound, hit_sound, played_win_sound, played_hit, played_game_over_sound)
         pygame.display.flip()
     pygame.quit()
 if __name__ == "__main__":
