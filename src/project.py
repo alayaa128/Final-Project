@@ -48,7 +48,6 @@ class Obstacle():
         self.rect.topleft = self.pos
         if self.age > self.life:
             self.dead = True
-        self.alpha = 255 * (1 - (self.age / self.life))
 
     def draw(self, surface):
         if self.dead:
@@ -113,7 +112,6 @@ def is_win(safe, character):
 
 def sound_effects(win, game_over, got_hit, win_sound, game_over_sound, hit_sound, 
                   played_win_sound, played_hit, played_game_over_sound):
-    #background_music = pygame.mixer.Sound('background music.mp3')
     if win and not played_win_sound:
         win_sound.play()
         played_win_sound = True
