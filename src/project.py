@@ -127,7 +127,6 @@ def sound_effects(win, game_over, got_hit, win_sound, game_over_sound, hit_sound
     return played_win_sound, played_hit, played_game_over_sound
 
 def display_text(win, game_over, screen, lives):
-    #displays text onto the screen
     game_font = pygame.font.SysFont('arial', 80)
     lives_font = pygame.font.SysFont('arial', 50)
     live_font = lives_font.render(f"Lives: {lives}", True, 'yellow')
